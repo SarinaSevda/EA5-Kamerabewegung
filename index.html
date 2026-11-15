@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Kamerabewegung</title>
+    <script src="ext/gl-matrix.js?v=2"></script>
+    <script>
+        console.log("TEST mat4:", typeof mat4);
+    </script>
+    <script src="vertexData_torus.js"></script>
+    <script src="vertexData_cone.js"></script>
+    <script src="vertexData_rekursiv.js"></script>
+    <script src="app.js"></script>
+    <script type="x-shader/x-vertex" id="vertexshader">
+
+        attribute vec3 aPosition;
+        attribute vec3 aNormal;
+
+        uniform mat4 uPMatrix;
+        uniform mat4 uMVMatrix;
+
+        varying vec4 vColor;
+
+        void main() {
+            gl_Position =
+                uPMatrix *
+                uMVMatrix *
+                vec4(aPosition, 1.0);
+
+            vColor =
+                vec4(
+                    aNormal.x,
+                    aNormal.y,
+                    aNormal.z,
+                    1.0
+                );
+
+            vColor = (vColor + 1.0) / 2.0;
+        }
+    </script>
+
+    <!-- Fragment Shader -->
+    <script type="x-shader/x-fragment" id="fragmentshader">
+
+        precision mediump float;
+
+        varying vec4 vColor;
+
+        void main() {
+            gl_FragColor = vColor;
+        }
+
+    </script>
+</head>
+<body onload="app.start()">
+<h1>Kamerabewegung</h1>
+<canvas
+        id="canvas"
+        width="1200"
+        height="650">
+</canvas>
+<h2>Rekursionstiefe</h2>
+<button id="recMinus">−</button>
+<span id="recLevel">0</span>
+<button id="recPlus">+</button>
+<h2>Steuerung</h2>
+<p>
+    ← / → : Kamera um die Szene bewegen<br>
+    ↑ / ↓ : Kamerahöhe verändern<br>
+    N : Kameraabstand vergrößern<br>
+    Shift + N : Kameraabstand verkleinern
+</p>
+<div  class="info-box">
+    <h3>Verwendete Quellen und Tools</h3>
+    <ul>
+        <li>
+            Loop-Vorlesungsskript Graphical Visualisation Technologies, Prof.
+            Dr. Felix Gers
+        </li>
+        <li>
+            <a
+                    href="http://blog.andreaskahler.com/2009/06/creating-icosphere-mesh-in-code.html"
+                    target="_blank"
+                    rel="noopener"
+            >
+                Creating an icosphere mesh in code – Andreas Kahler
+            </a>
+        </li>
+        <li>
+            <strong>Hinweis zur Nutzung generativer KI:</strong> Bei der
+            Bearbeitung dieser Aufgabe wurde ChatGPT als
+            unterstützendes Werkzeug genutzt. Es diente der Erläuterung
+            fachlicher Konzepte, der Unterstützung bei der Fehlersuche sowie der
+            Generierung und Diskussion von Lösungs- und Codevorschlägen.
+            Sämtliche übernommenen Inhalte wurden von mir nachvollzogen,
+            angepasst und auf ihre Funktionalität geprüft.
+        </li>
+    </ul>
+
+</div>
+<footer>EA5 - Kamerabewegung - Sarina Sevda Schoknecht</footer>
+
+</body>
+</html>
